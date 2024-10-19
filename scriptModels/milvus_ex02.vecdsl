@@ -1,0 +1,21 @@
+SCRIPT FOR MILVUS 
+[ 
+INSERT INTO COLLECTION onlineShop 
+  FROM path = "data/shop_data.csv" 
+  number of records = 5000; 
+  
+QUERY ON COLLECTION onlineShop 
+  top K = 10 
+  OUT FIELDS [description] 
+  WITH FILTERS [description LIKE "Ne%"]; 
+  
+VECTOR SEARCH IN COLLECTION onlineShop 
+  top K = 10 
+  metric = EUCLIDEAN 
+  OUT FIELDS [description, location] 
+  WITH FILTERS 
+  [ 
+    description LIKE "Greek comedy"; 
+    descr_emb = [0.1234567890123, 0.2345678901234, 0.3456789012345, …];
+  ];  
+]
