@@ -1,0 +1,42 @@
+SCRIPT FOR MILVUS 
+[ 
+  
+CREATE VECTOR DATABASE milvusVb  
+WITH CONNECTION  
+  host = "localhost" 
+  port = 19530; 
+  
+CREATE CLUSTER shopCluster IN milvusDb 
+  number of collections = 5; 
+  
+CREATE VECTOR COLLECTION onlineShop IN default 
+  dynamic  
+  WITH FIELDS  
+  [id, description, location, descr_emb]; 
+  
+CREATE NONVECTOR FIELD id  
+  primary 
+  type = INT; 
+  
+CREATE NONVECTOR FIELD location  
+  type = VARCHAR; 
+  
+CREATE NONVECTOR FIELD description  
+  type = VARCHAR; 
+  
+CREATE FIELD LIMIT descrLimit 
+  type = MAXSIZE  
+  value = "500"; 
+  
+CREATE VECTOR FIELD descr_emb  
+  type = FLOAT_VECTOR 
+  WITH EMBEDDING MODEL = "SentenceTransformer-allMiniLM-L6-v2"; 
+  
+CREATE FIELD LIMIT descrEmbLimit 
+  type = VECTORDIM  
+  value = "384";
+  
+CREATE VECTOR INDEX desrcIdx 
+  metric = EUCLIDEAN 
+  type = IVF_FLAT  
+]
