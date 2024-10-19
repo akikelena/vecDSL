@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vecdslMM" nsURI="domijMAS" nsPrefix="ftn.uns">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Script">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//Method" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendor" lowerBound="1"
+        eType="#//EVendorName"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DdlMethod" abstract="true" eSuperTypes="#//Method">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ddlConcept" lowerBound="1"
+        eType="#//Concept" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ddlNode" upperBound="-1"
+        eType="#//DdlMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Create" eSuperTypes="#//DdlMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Alter" eSuperTypes="#//DdlMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alterCond" lowerBound="1"
+        upperBound="-1" eType="#//Filter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Drop" eSuperTypes="#//DdlMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dropCond" upperBound="-1"
+        eType="#//Filter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DmlMethod" abstract="true" eSuperTypes="#//Method">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dmlCollection" lowerBound="1"
+        eType="#//VectorCollection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Insert" eSuperTypes="#//DmlMethod">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NoOfRecordsInInsert"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NoOfRecordsInInsert" value="Tuple {&#xA;&#x9;message : String = 'Number of records must be greater than zero!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.nofRecords->notEmpty() implies self.nofRecords > 0&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nofRecords" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Update" eSuperTypes="#//DmlMethod">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueIDsInUpdate NofRecordsInUpdate"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueIDsInUpdate" value="Tuple {&#xA;&#x9;message : String = 'Identifiers must not repeat!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.ids->isUnique(id | id)&#xA;}.status"/>
+      <details key="NofRecordsInUpdate" value="Tuple {&#xA;&#x9;message : String = 'Number of records must be greater than zero!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.nofRecords->notEmpty() implies self.nofRecords > 0&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nofRecords" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="updateCond" lowerBound="1"
+        upperBound="-1" eType="#//Filter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ids" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Delete" eSuperTypes="#//DmlMethod">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueIDsInDelete"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueIDsInDelete" value="Tuple {&#xA;&#x9;message : String = 'Identifiers must not repeat!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.ids->isUnique(id | id)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ids" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deleteCond" upperBound="-1"
+        eType="#//Filter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryMethod" abstract="true" eSuperTypes="#//Method">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="TopKValue OutputFieldsQVC"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="TopKValue" value="Tuple {&#xA;&#x9;message : String = 'Top K value must at least one!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.topK >= 1&#xA;}.status"/>
+      <details key="OutputFieldsQVC" value="Tuple {&#xA;&#x9;message : String = 'Output fields must be from the list of query collection field list!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.outputFields->forAll(of | self.queryCollection.fields->includes(of))&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="topK" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryCollection" lowerBound="1"
+        eType="#//VectorCollection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputFields" lowerBound="1"
+        upperBound="-1" eType="#//Field"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Filter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+        eType="#//EOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filterField" lowerBound="1"
+        eType="#//Concept"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VectorSearch" eSuperTypes="#//QueryMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metric" lowerBound="1"
+        eType="#//EMetricType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numUnitsProbe" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="8"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vecSearchFilters" upperBound="-1"
+        eType="#//Filter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VectorDatabase" eSuperTypes="#//Concept">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueClusterName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueClusterName" value="Tuple {&#xA;&#x9;message : String = 'Cluster name must be unique within specific vector database!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.clusters->forAll(c1, c2 | c1 &lt;> c2 implies c1.name &lt;> c2.name)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clusters" upperBound="-1"
+        eType="#//Cluster" eOpposite="#//Cluster/vectordb"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" lowerBound="1"
+        eType="#//Connection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="apiKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="region" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRole" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userPrivillege" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloud" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="environment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="#//Concept">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NoOfCollectionsGT UniqueCollectionNameInCluster clusterLimitsNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NoOfCollectionsGT" value="Tuple {&#xA;&#x9;message : String = 'Number of collections in cluster must be greater than zero!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.nofCollections > 0&#xA;}.status"/>
+      <details key="UniqueCollectionNameInCluster" value="Tuple {&#xA;&#x9;message : String = 'Collection name must be unique within specific cluster!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.collections->forAll(col1, col2 | col1 &lt;> col2 implies col1.name &lt;> col2.name)&#xA;}.status"/>
+      <details key="clusterLimitsNames" value="Tuple {&#xA;&#x9;message : String = 'Cluster limit names must be unique!',&#xA;&#x9;status : Boolean = &#xA;&#x9;&#x9;&#x9;self.clusterLimits->forAll(lim1, lim2 | lim1 &lt;> lim2 implies lim1.name &lt;> lim2.name)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collections" upperBound="-1"
+        eType="#//VectorCollection" eOpposite="#//VectorCollection/cluster"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nofCollections" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vectordb" lowerBound="1"
+        eType="#//VectorDatabase" eOpposite="#//VectorDatabase/clusters"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clusterLimits" upperBound="-1"
+        eType="#//ClusterLimit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VectorCollection" eSuperTypes="#//Concept">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="colLimitsNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="colLimitsNames" value="Tuple {&#xA;&#x9;message : String = 'Collection limit names must be unique!',&#xA;&#x9;status : Boolean = &#xA;&#x9;&#x9;&#x9;self.collectionLimits->forAll(lim1, lim2 | lim1 &lt;> lim2 implies lim1.name &lt;> lim2.name)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cluster" lowerBound="1"
+        eType="#//Cluster" eOpposite="#//Cluster/collections"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partitions" upperBound="-1"
+        eType="#//Partition" eOpposite="#//Partition/colPartOwner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//Field" eOpposite="#//Field/colFieldOwner"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamic" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="podtype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="podSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="podEnv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collectionLimits" upperBound="-1"
+        eType="#//CollectionLimit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Partition" eSuperTypes="#//Concept">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="SinglePartitionKey"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="SinglePartitionKey" value="Tuple {&#xA;&#x9;message : String = 'There must be just one partition key for each partition!',&#xA;&#x9;status : Boolean = &#xA;    &#x9;&#x9;self.partitionKey->size() &lt;= 1&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colPartOwner" lowerBound="1"
+        eType="#//VectorCollection" eOpposite="#//VectorCollection/partitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partitionKey" lowerBound="1"
+        eType="#//Field"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" abstract="true" eSuperTypes="#//Concept">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="fieldLimitsNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="fieldLimitsNames" value="Tuple {&#xA;&#x9;message : String = 'Field limit names must be unique!',&#xA;&#x9;status : Boolean = &#xA;&#x9;&#x9;&#x9;self.fieldLimits->forAll(lim1, lim2 | lim1 &lt;> lim2 implies lim1.name &lt;> lim2.name)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colFieldOwner" lowerBound="1"
+        eType="#//VectorCollection" eOpposite="#//VectorCollection/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPrimary" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldLimits" upperBound="-1"
+        eType="#//FieldLimit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="#//Concept"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Limit" abstract="true" eSuperTypes="#//Concept">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmbeddingModel" eSuperTypes="#//Concept"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Concept" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldLimit" eSuperTypes="#//Limit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EFieldLimit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionLimit" eSuperTypes="#//Limit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EColectionLimit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClusterLimit" eSuperTypes="#//Limit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EClusterLimit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IndexLimit" eSuperTypes="#//Limit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EIndexLimit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VectorIndex" eSuperTypes="#//Index">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="vIdxLimitsNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="vIdxLimitsNames" value="Tuple {&#xA;&#x9;message : String = 'Vector index limit names must be unique!',&#xA;&#x9;status : Boolean = &#xA;&#x9;&#x9;&#x9;self.vIndexLimits->forAll(lim1, lim2 | lim1 &lt;> lim2 implies lim1.name &lt;> lim2.name)&#xA;}.status"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metric" lowerBound="1"
+        eType="#//EMetricType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EVIdxType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vIndexLimits" upperBound="-1"
+        eType="#//IndexLimit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EIndexLimit">
+    <eLiterals name="NOFCLUSTERUNIT"/>
+    <eLiterals name="NOFFACTORSPQ" value="1"/>
+    <eLiterals name="MAXNODEDGRE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EMetricType">
+    <eLiterals name="EUCLIDEAN"/>
+    <eLiterals name="MANHATTAN" value="1"/>
+    <eLiterals name="DOT" value="2"/>
+    <eLiterals name="COSINE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EScalarDType">
+    <eLiterals name="INT"/>
+    <eLiterals name="VARCHAR" value="1"/>
+    <eLiterals name="DOUBLE" value="2"/>
+    <eLiterals name="FLOAT" value="3"/>
+    <eLiterals name="DATE" value="4"/>
+    <eLiterals name="DATETIME" value="5"/>
+    <eLiterals name="JSON" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EClusterLimit">
+    <eLiterals name="NOFCOLLECTIONS"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVIdxType">
+    <eLiterals name="FLAT"/>
+    <eLiterals name="IVF_FLAT" value="1"/>
+    <eLiterals name="IVF_SQ8" value="2"/>
+    <eLiterals name="IVF_PQ" value="3"/>
+    <eLiterals name="HNSW" value="4"/>
+    <eLiterals name="SCANN" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EFieldLimit">
+    <eLiterals name="VECTORDIM"/>
+    <eLiterals name="ARRAYLEN" value="1"/>
+    <eLiterals name="MAXSIZE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EOperator">
+    <eLiterals name="AND"/>
+    <eLiterals name="OR" value="1"/>
+    <eLiterals name="NOT" value="2"/>
+    <eLiterals name="LIKE" value="3"/>
+    <eLiterals name="EQ" value="4"/>
+    <eLiterals name="NEQ" value="5"/>
+    <eLiterals name="GT" value="6"/>
+    <eLiterals name="GTE" value="7"/>
+    <eLiterals name="LT" value="8"/>
+    <eLiterals name="LTE" value="9"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EColectionLimit">
+    <eLiterals name="NOFPARTITIONS"/>
+    <eLiterals name="NOFFIELDS" value="1"/>
+    <eLiterals name="NOFSHARDS" value="2"/>
+    <eLiterals name="VECTORDIM" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVendorName">
+    <eLiterals name="PINECONE"/>
+    <eLiterals name="MILVUS" value="1"/>
+    <eLiterals name="CHROMA" value="2"/>
+    <eLiterals name="WEAVIATE" value="3"/>
+    <eLiterals name="QDRANT" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonVectorSearch" eSuperTypes="#//QueryMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nonVecFilters" upperBound="-1"
+        eType="#//Filter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ENVIdxType">
+    <eLiterals name="STANDARD"/>
+    <eLiterals name="FULL_TEXT" value="1"/>
+    <eLiterals name="INTEGER" value="2"/>
+    <eLiterals name="PARAM_INT" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonVectorField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nonVectorIndexes" upperBound="-1"
+        eType="#//NonVectorIndex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EScalarDType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VectorField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vectorIndexes" upperBound="-1"
+        eType="#//VectorIndex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//EVectorDType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="embModel" eType="#//EmbeddingModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonVectorIndex" eSuperTypes="#//Index">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ENVIdxType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVectorDType">
+    <eLiterals name="BINARY_VECTOR"/>
+    <eLiterals name="FLOAT_VECTOR" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>
