@@ -26,26 +26,20 @@ import argparse
 def compute_metrics(code: str) -> dict:
     metrics = {}
 
-    # 1. Lines of Code
     lines = code.splitlines()
     metrics['LinesOfCode'] = len(lines)
 
-    # 2. Token Count (excluding ENDMARKER)
     tokens = list(tokenize.generate_tokens(io.StringIO(code).readline))
     filtered_tokens = [t for t in tokens if t.type != tokenize.ENDMARKER]
     metrics['TokenCount'] = len(filtered_tokens)
 
-    # 3. Non-Word Character Count
-    # \w matches [a-zA-Z0-9_], so [^\w\s] matches characters that are not word characters or whitespace.
     non_word_chars = re.findall(r'[^\w\s]', code)
     metrics['NonWordCharacterCount'] = len(non_word_chars)
 
-    # 4. Keywords (using token type NAME and checking with keyword.iskeyword)
     keyword_tokens = [t.string for t in filtered_tokens if t.type == tokenize.NAME and keyword.iskeyword(t.string)]
     metrics['NumKeywords'] = len(keyword_tokens)
     metrics['NumDifferentKeywords'] = len(set(keyword_tokens))
 
-    # 5. Max Nesting (using AST)
     try:
         tree = ast.parse(code)
     except Exception as e:
@@ -56,7 +50,6 @@ def compute_metrics(code: str) -> dict:
     else:
         metrics['MaxNesting'] = 0
 
-    # 6. Function Call Analysis (for parameters)
     if tree:
         op_calls, total_params = count_function_calls(tree)
     else:
@@ -65,29 +58,25 @@ def compute_metrics(code: str) -> dict:
     metrics['NumParameters'] = total_params
     metrics['AvgParameterPerCall'] = total_params / op_calls if op_calls > 0 else 0
 
-    # 7. Halstead Metrics (Operators and Operands)
     operators = []
     operands = []
     for t in filtered_tokens:
-        # Consider OP tokens as operators.
         if t.type == tokenize.OP:
             operators.append(t.string)
-        # For NAME, NUMBER, and STRING tokens: if a NAME is a keyword, treat it as an operator.
         elif t.type in (tokenize.NAME, tokenize.NUMBER, tokenize.STRING):
             if t.type == tokenize.NAME and keyword.iskeyword(t.string):
                 operators.append(t.string)
             else:
                 operands.append(t.string)
 
-    N1 = len(operators)         # Total operators
-    n1 = len(set(operators))      # Distinct operators
-    N2 = len(operands)           # Total operands
-    n2 = len(set(operands))        # Distinct operands
+    N1 = len(operators)         
+    n1 = len(set(operators))     
+    N2 = len(operands)          
+    n2 = len(set(operands))       
 
     metrics['NumOperations'] = N1
     metrics['NumDifferentOperations'] = n1
 
-    # Halstead Volume: (N1 + N2) * log2(n1 + n2)
     if (n1 + n2) > 0:
         halstead_volume = (N1 + N2) * math.log2(n1 + n2)
     else:
@@ -103,7 +92,6 @@ def get_max_nesting(node, current_depth=0):
     """
     max_depth = current_depth
     for child in ast.iter_child_nodes(node):
-        # Increase depth if child is a compound statement.
         if isinstance(child, (ast.If, ast.For, ast.While, ast.Try, ast.With,
                               ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             child_depth = get_max_nesting(child, current_depth + 1)
@@ -122,7 +110,6 @@ def count_function_calls(node):
     for child in ast.walk(node):
         if isinstance(child, ast.Call):
             call_count += 1
-            # For each call, count the positional arguments and keyword arguments.
             total_params += len(child.args) + len(child.keywords)
     return call_count, total_params
 

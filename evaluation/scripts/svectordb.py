@@ -23,7 +23,6 @@ data = {
 }
 collection.insert(data)
 
-# --- Update: For rows with "CS" in courseId, update courseDescription ---
 update_df = pd.read_csv("/data/science/courses_update.csv")
 for _, row in update_df.iterrows():
     if "CS" in str(row["courseId"]):
@@ -46,7 +45,6 @@ search_results = collection.search(
 )
 print("SVectordB Vector Search Results:", search_results)
 
-# --- Non-vector query: fetch documents where courseId starts with 'CS' ---
 non_vector_results = collection.query(
     filter_expr="courseId LIKE 'CS%'",
     output_fields=["courseId", "courseName"],

@@ -24,7 +24,6 @@ update_df = pd.read_csv("/data/science/courses_update.csv")
 for _, row in update_df.iterrows():
     if "CS" in str(row["courseId"]):
         new_vector = np.array([float(x) for x in row["courseDescription"].split()], dtype=np.float32)
-        # Identify the record(s) matching this courseId
         indices = ds.query(filter_expr=f"courseId == {row['courseId']}")
         for idx in indices:
             ds[idx]["courseDescription"] = new_vector
@@ -50,7 +49,6 @@ non_vector_results = ds.query(
 print("Deeplake Non-Vector Query Results:", non_vector_results)
 
 ds.load()
-
 ds.delete(filter_expr="creditHours > 5")
 ds.drop_tensor("creditHours")
 ds.delete_dataset()

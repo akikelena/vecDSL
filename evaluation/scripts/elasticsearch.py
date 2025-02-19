@@ -79,7 +79,6 @@ response = es.search(index=index_name, body={
 })
 print("Elasticsearch Vector Search Results:", response["hits"]["hits"])
 
-# --- Non-vector query: documents where courseId starts with "CS" ---
 response = es.search(index=index_name, body={
     "size": 5,
     "query": {
@@ -89,14 +88,12 @@ response = es.search(index=index_name, body={
 })
 print("Elasticsearch Non-Vector Query Results:", response["hits"]["hits"])
 
-# --- Delete again documents where creditHours > 5 ---
 es.delete_by_query(index=index_name, body={
     "query": {
         "range": {"creditHours": {"gt": 5}}
     }
 })
 
-# --- Simulate dropping the "creditHours" field by reindexing documents without it ---
 docs = es.search(index=index_name, body={"query": {"match_all": {}}}, size=1000)["hits"]["hits"]
 for doc in docs:
     source = doc["_source"]
@@ -104,5 +101,4 @@ for doc in docs:
         del source["creditHours"]
         es.index(index=index_name, id=doc["_id"], body=source)
 
-# --- Finally, delete the index ---
 es.indices.delete(index=index_name)
