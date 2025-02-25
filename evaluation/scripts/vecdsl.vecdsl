@@ -1,0 +1,80 @@
+SCRIPT 
+  vendor = MILVUS
+  idNumber = 2208
+
+METHODS 
+  CREATE VECTOR DATABASE UniversityDb
+   VIA CONNECTION: 
+    host = "localhost" 
+	 port = 8081
+       
+  CREATE CLUSTER FacultyOfScience IN UniversityDB
+   number of collections = 2
+
+  CREATE COLLECTION ScienceCourses IN FacultyOfScience 
+   dynamic
+   description = "Science course information"
+     
+  CREATE LIMIT CourseLimit FOR ScienceCourses
+   type = NOFFIELDS 
+   value = 4
+
+  CREATE PARTITION UndergradPartition IN ScienceCourses FOR courseId
+   partition strategy = "HASH"
+
+  CREATE NON VECTOR FIELD courseId IN ScienceCourses 
+   primary
+   type = INT
+   description = "Unique course identifier"
+   
+  CREATE NON VECTOR INDEX CourseIdIndex FOR courseId
+   type = INTEGER
+
+  CREATE NON VECTOR FIELD courseName IN ScienceCourses 
+   type = VARCHAR
+         
+  CREATE VECTOR FIELD courseDescription IN ScienceCourses 
+   type = FLOAT_VECTOR
+   dimension = 768
+   embedding model = "SentenceTransformer(BAAI/bge-m3)"
+   
+  CREATE LIMIT DescLimit FOR courseDescription
+   type = VECTORDIM 
+   value = 768
+  
+  CREATE VECTOR INDEX CourseVecIndex FOR coursed
+   type = HNSW 
+   metric = COSINE  
+
+  CREATE NON VECTOR FIELD creditHours IN ScienceCourses 
+   type = INT
+
+   INSERT IN ScienceCourses
+  path = "/data/science/courses.csv"
+  num rows = 1000
+
+ UPDATE IN ScienceCourses
+  path = "/data/science/courses_update.csv"
+  conditions [{courseId LIKE "CS%"}]
+
+ DELETE IN ScienceCourses
+  conditions [{creditHours > 5}]
+
+ VECTOR SEARCH ON ScienceCourses
+  top k = 10
+  metric = COSINE
+  range = 0.8
+  radius = 0.9
+  output fields [courseName, courseDescription]
+  filters [{creditHours >= 3}]
+
+ NON VECTOR SEARCH ON ScienceCourses
+  top k = 5
+  output fields [courseId, courseName]
+  filters [{courseId LIKE "CS%"}]
+
+ ALTER IN CLUSTER FacultyOfScience IN UniversityDB
+  type = DELETE
+  field [creditHours]
+
+ DROP ScienceCourses
