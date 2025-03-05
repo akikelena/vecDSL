@@ -15,9 +15,9 @@ Traditional approaches to working with vector databases often require developers
 * Cross-Vendor Compatibility: vecDSL allows users to switch between vector databases without needing to learn new concepts or query languages.
 
 ## Benefits
-Simplified Database Access: vecDSL provides a unified interface to manage and query vector databases.
-Improved Productivity: vecDSL reduces the time needed to develop, test, and optimize vector database solutions.
-Cross-Database Compatibility: It allows developers to easily switch between vector databases without altering their underlying logic.
+* Simplified Database Access: vecDSL provides a unified interface to manage and query vector databases.
+* Improved Productivity: vecDSL reduces the time needed to develop, test, and optimize vector database solutions.
+* Cross-Database Compatibility: It allows developers to easily switch between vector databases without altering their underlying logic.
 
 Script model examples for Milvus vector database are available [here](https://github.com/akikelena/vecDSL/tree/main/scriptModels).
 
