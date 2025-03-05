@@ -1,0 +1,50 @@
+ SCRIPT
+    vendor=MILVUS
+    idNumber=2208
+
+ METHODS
+    CREATE VECTOR DATABASE UniversityDb
+    VIA CONNECTION:
+        host="localhost"
+        port=8081
+
+    CREATE CLUSTER FacultyOfSciences IN UniversityDb
+        number of collections=2
+
+    CREATE COLLECTION ScienceCoursces IN FacultyOfScience
+        dynamic
+        description="Sciencecourseinformation"
+ 
+    CREATE LIMIT CourseLimit FOR ScienceCourses
+        type=NOFFIELDS
+        value=4
+ 
+    CREATE NON VECTOR FIELD courseId IN ScienceCourses
+        primary
+        type=INT
+        description="Uniquecourseidentifier"
+ 
+    CREATE NON VECTOR INDEXCourseIdIndexFORcourseId
+        type=INTEGER
+ 
+    CREATE PARTITION UndergradPartition IN ScienceCourses FOR courseId
+        partitionstrategy=HASH
+ 
+    CREATE NON VECTOR FIELD courseName IN ScienceCourses
+        type=VARCHAR
+ 
+    CREATE VECTOR FIELD courseDescription IN ScienceCourses
+        type=FLOAT_VECTOR
+        dimension=768
+        embeddingmodel="SentenceTransformer(BAAI/bge-m3)"
+ 
+    CREATE LIMIT DescLimit FOR courseDescription
+        type=VECTORDIM
+        value=768
+ 
+    CREATE VECTOR INDEX CourseVecIndex FOR courseDescription
+        type=HNSW
+        metric=COSINE
+ 
+    CREATE NON VECTOR FIELD creditHours IN ScienceCourses
+        type=INT
